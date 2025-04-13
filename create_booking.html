@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Book Service</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+
+    h2 {
+      color: #333;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="date"],
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 4px;
+      margin-bottom: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #4CAF50;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Book: {{ service.name }}</h2>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <label for="booking_type">Booking Type:</label>
+    <select name="booking_type" id="booking_type" required onchange="toggleEndDate()">
+      <option value="single_day">Single Day</option>
+      <option value="date_range">Date Range</option>
+    </select>
+
+    <label for="booking_date">Start Date:</label>
+    <input type="date" name="booking_date" required>
+
+    <div id="end_date_group" class="hidden">
+      <label for="end_date">End Date:</label>
+      <input type="date" name="end_date">
+    </div>
+
+    <label for="time_slot">Time Slot:</label>
+    <input type="text" name="time_slot" placeholder="e.g. 10:00 AM - 12:00 PM" required>
+
+    <label for="guests">Number of Guests:</label>
+    <input type="number" name="guests" min="1" value="1" required>
+
+    <button type="submit">Book Now</button>
+  </form>
+
+  <a class="back-link" href="{% url 'service_list' %}">← Back to Services</a>
+
+  <script>
+    function toggleEndDate() {
+      const bookingType = document.getElementById('booking_type').value;
+      const endDateGroup = document.getElementById('end_date_group');
+      if (bookingType === 'date_range') {
+        endDateGroup.classList.remove('hidden');
+        endDateGroup.querySelector('input').required = true;
+      } else {
+        endDateGroup.classList.add('hidden');
+        endDateGroup.querySelector('input').required = false;
+      }
+    }
+
+    // Set visibility on page load based on selected option
+    window.onload = toggleEndDate;
+  </script>
+
+</body>
+</html>

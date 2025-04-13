@@ -1,0 +1,10 @@
+<h2>Your Bookings</h2>
+<ul>
+  {% for booking in bookings %}
+    <li>
+      {{ booking.service.name }} | {{ booking.booking_date }} | {{ booking.time_slot }} | Guests: {{ booking.guests }}
+    </li>
+  {% empty %}
+    <li>No bookings yet.</li>
+  {% endfor %}
+</ul>
