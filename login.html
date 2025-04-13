@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% load socialaccount %}  {# Required for provider_login_url #}
+
+{% block content %}
+<div class="card shadow p-4 mx-auto mt-5" style="max-width: 500px;">
+    <h2 class="text-center mb-4">Welcome Back to BookMySpeciality</h2>
+
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Error:</strong> Please correct the highlighted fields below.
+        </div>
+    {% endif %}
+
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="{{ form.username.id_for_label }}" class="form-label">Username</label>
+            {{ form.username|add_class:"form-control"|attr:"placeholder:Enter your username" }}
+            {% for error in form.username.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            <label for="{{ form.password.id_for_label }}" class="form-label">Password</label>
+            {{ form.password|add_class:"form-control"|attr:"placeholder:Enter your password" }}
+            {% for error in form.password.errors %}
+                <div class="invalid-feedback d-block">{{ error }}</div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Login</button>
+    </form>
+
+    <p class="text-center mt-3">
+        New user? <a href="{% url 'signup' %}">Sign up</a>
+    </p>
+    <p class="text-center">
+        <a href="{% url 'password_reset' %}">Forgot password?</a>
+    </p>
+
+    {% if socialaccount_providers %}
+        <hr>
+        <div class="text-center">
+            <p>Or log in with:</p>
+            {% if 'google' in socialaccount_providers %}
+                <a href="{% provider_login_url 'google' %}" class="btn btn-outline-dark btn-sm me-2">Google</a>
+            {% endif %}
+            {% if 'facebook' in socialaccount_providers %}
+                <a href="{% provider_login_url 'facebook' %}" class="btn btn-outline-primary btn-sm">Facebook</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
